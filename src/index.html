@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Meal Finder</title>
+  <link rel="stylesheet" href="style.css" /> 
+</head>
+<body>
+<!--========================================================
+                          HEADER
+=========================================================-->
+<header id="header">
+  <div class="container">
+      <div class="row">
+          <div class="grid_12">
+              <div class="brand put-left">
+                  <h1><a href="index.html">Mealner</a></h1>
+                  <div class="slogan">meal finder</div>
+              </div>
+              <nav class="put-right">
+                  <ul class="sf-menu">
+                      <li class="current"><a href="index.html">Home</a></li>
+                      <li><a href="about.html">About</a></li>
+                  </ul>
+              </nav>
+          </div>
+      </div>
+  </div>
+</header>
+
+<!--========================================================
+                          CONTENT
+=========================================================-->
+  <div style="text-align: center;" class="content">
+    <label for="searchType" ></label>
+    <select id="searchType">
+      <option value="name">Meal Name</option>
+      <option value="category">Meal Category</option>
+    </select>
+    <input type="text" id="searchInput" placeholder="What are you looking for?">
+    <button onclick="searchMeals()" class="search">Search</button>
+  </div>
+  <div class="meal-container" id="mealList"></div>
+
+
+  <div class="overlay" id="overlay" onclick="closePopup()"></div>
+  <div class="popup" id="popupForm">
+    <h2>Plan Your Meal</h2>
+    <label for="date">Date:</label>
+    <input type="date" id="date">
+    <div id="selectedMealContainer"></div>
+    <div>
+      <h3>Breakfast</h3>
+      <div id="breakfastMeals"></div>
+      <button onclick="addMealToType('Breakfast')">Add</button>
+      <hr>
+    </div>
+    <div>
+      <h3>Lunch</h3>
+      <div id="lunchMeals"></div>
+      <button onclick="addMealToType('Lunch')">Add</button>
+      <hr>
+    </div>
+    <div>
+      <h3>Dinner</h3>
+      <div id="dinnerMeals"></div>
+      <button onclick="addMealToType('Dinner')">Add</button>
+      <hr>
+    </div>
+    <div class="buttons">
+    <button id="btnCreate" class="btn btn-default" onclick="createMealPlan()">Create</button> 
+    <button id="btnRead" class="btn btn-default">Read</button>  
+    <button id="btnDelete" class="btn btn-default">Delete</button>
+    </div>
+  </div>
+
+<!--========================================================
+                        FOOTER
+=========================================================-->
+<footer class="footer">2024 Aina Qistina
+  <p class="info">
+    &copy; <a href="index.html">mealner</a>
+</p>  
+</footer> 
+
+
+<!--========================================================
+                        JAVASCRIPT
+=========================================================-->
+  <script>
+    let selectedMeal = {};
+    let mealList = [];
+    const mealContainer = document.getElementById('mealList');
+    async function searchMeals() {
+      const query = document.getElementById('searchInput').value;
+      const searchType = document.getElementById('searchType').value;
+      mealContainer.innerHTML = '';
+      let url = '';
+      if (searchType == 'name') {
+        url = `https://www.themealdb.com/api/json/v1/1/search.php?s=${query}`;
+        fetchMeals(url);
+      } else if (searchType == 'category') {
+        url = `https://www.themealdb.com/api/json/v1/1/filter.php?c=${query}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        if (data.meals) {
+          for (const meal of data.meals) {
+            await fetchMealDetails(meal.idMeal);
+          }
+        } else {
+          mealContainer.innerHTML = '<p>No meals found!</p>';
+        }
+      }
+    }
+  
+    async function fetchMeals(url) {
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.meals) {
+        data.meals.forEach((meal) => displayMeal(meal));
+      } else {
+        mealContainer.innerHTML = '<p>No meals found!</p>';
+      }
+    }
+    async function fetchMealDetails(mealId) {
+      const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      if (data.meals) {
+        displayMeal(data.meals[0]);
+      }
+    }
+    function displayMeal(meal) {
+      const mealElement = `
+        <div class="meal">
+          <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+          <div class="meal-info">
+            <h3>${meal.strMeal}</h3>
+            <p>Category: ${meal.strCategory}</p>
+            <div class="buttons">
+              <button class="details-btn" onclick="openMealPage('${meal.idMeal}')">Details</button>
+              <button class="add-btn" onclick="selectMeal('${meal.idMeal}')">+</button>
+            </div>
+          </div>
+        </div>`;
+      mealContainer.innerHTML += mealElement;
+    }
+    function openMealPage(mealId) {
+      window.location.href = `meal.html?id=${mealId}`;
+    }
+    async function selectMeal(mealId) {
+      const url = `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      const meal = data.meals[0];
+      selectedMeal = {
+        name: meal.strMeal,
+        category: meal.strCategory,
+        ingredients: getIngredients(meal),
+      };
+      document.getElementById('selectedMealContainer').innerText = 
+        `Selected: ${selectedMeal.name} (${selectedMeal.category})`;
+      openPopup();
+    }
+    function getIngredients(meal) {
+      let ingredients = '';
+      let count = 1;
+      for (let i = 1; i <= 20; i++) {
+        const ingredient = meal[`strIngredient${i}`];
+        const measure = meal[`strMeasure${i}`];
+        if (ingredient && ingredient.trim() !== '') {
+          ingredients += `${count}. ${ingredient} - ${measure}\n`;
+          count++;
+        }
+      }
+      return ingredients;
+    }
+    function addMealToType(type) {
+      const container = document.getElementById(`${type.toLowerCase()}Meals`);
+      const mealItem = document.createElement('div');
+      mealItem.classList.add('meal-item');
+      mealItem.innerHTML = `
+        <span>${selectedMeal.name} - ${selectedMeal.category}</span>
+        <button class="delete-btn" onclick="deleteMeal('${type}', '${selectedMeal.name}')">X</button>
+        `;
+        container.appendChild(mealItem);
+        mealList.push({ type, ...selectedMeal });
+    }
+    function deleteMeal(type, mealName) {
+      // Find and remove the meal from the mealList array
+      mealList = mealList.filter(meal => !(meal.type === type && meal.name === mealName));
+      // Refresh the displayed meal list
+      const container = document.getElementById(`${type.toLowerCase()}Meals`);
+      container.innerHTML = '';
+      mealList.filter(meal => meal.type === type).forEach(meal => {
+        const mealItem = document.createElement('div');
+        mealItem.classList.add('meal-item');
+        mealItem.innerHTML = `
+            <span>${meal.name} - ${meal.category}</span>
+            <button class="delete-btn" onclick="deleteMeal('${meal.type}', '${meal.name}')">X</button>
+        `;
+        container.appendChild(mealItem);
+      });
+    }
+    function openPopup() {
+      document.getElementById('popupForm').style.display = 'block';
+      document.getElementById('overlay').style.display = 'block';
+    }
+    function closePopup() {
+      document.getElementById('popupForm').style.display = 'none';
+      document.getElementById('overlay').style.display = 'none';
+    }
+  
+    const fs = require('fs');
+    const path = require('path');
+    const btnCreate = document.getElementById('btnCreate');
+    const btnRead = document.getElementById('btnRead');
+    const btnUpdate = document.getElementById('btnUpdate')
+    const btnDelete = document.getElementById('btnDelete');
+    let pathName = path.join(__dirname, 'Files');
+  
+    btnCreate.addEventListener('click', function createMealPlan() {
+      const date = document.getElementById('date').value;
+      const file = path.join(pathName, `${date}.txt`);
+      let content = `Date: ${date}\n\n`;
+      mealList.forEach((meal) => {
+        content += `
+~~~ ${meal.type } ~~~
+Meal Name: ${meal.name}
+Category: ${meal.category}
+Grocery List:\n${meal.ingredients}\n`;
+      });
+      fs.writeFile(file, content, function (err) {
+        if (err) {
+          return console.log(err);
+        }
+        alert(`${date}.txt file was created!`);
+        console.log('The file was created');
+      });
+    });
+  
+    btnRead.addEventListener('click', function () {
+      const date = document.getElementById('date').value;
+      const file = path.join(pathName, `${date}.txt`);
+      fs.readFile(file, 'utf8', function (err, data) {
+        if (err) {
+          return console.log(err);
+        }
+        alert(data);
+        console.log('The file was read!');
+      });
+    });
+
+    btnDelete.addEventListener('click', function () {
+      const date = document.getElementById('date').value;
+      const file = path.join(pathName, `${date}.txt`);
+      fs.unlink(file, function (err) {
+        if (err) {
+          return console.log(err);
+        }
+        alert(`${date}.txt file was deleted!`);
+        console.log('The file was deleted');
+      });
+    });
+
+  </script>
+  
+</body>
+</html>
+
+
+
+

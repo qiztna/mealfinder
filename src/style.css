@@ -1,0 +1,610 @@
+@import url(http://fonts.googleapis.com/css?family=Tinos:700);
+@import url(http://fonts.googleapis.com/css?family=Ubuntu:300,300italic,400italic);
+@import url(http://fonts.googleapis.com/css?family=Roboto+Slab:700,400,300);
+@import url(http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz);
+
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    font: inherit;
+    vertical-align: top;
+}
+
+body {
+    background: #6393ad;
+    color: #383838;
+    font: 300 14px/22px 'Ubuntu', sans-serif;
+    line-height: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+a {
+    font: inherit;
+    color: inherit;
+    text-decoration: none;
+    -webkit-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+a:hover {
+    text-decoration: none;
+}
+a:active {
+    background: inherit;
+}
+.put-left {
+    float: left;
+}
+.put-right {
+    float: right;
+}
+
+/* ================================================= */
+/* -------------------- HEADER -------------------- */
+/* ================================================= */
+#header {
+    position: relative;
+    background: url("img/header_bg.png") repeat bottom;
+    min-height: 133px;
+}
+#header:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 6px;
+    background: url("img/bg_cover.png") repeat-x;
+}
+.brand {
+    margin-left: -3px;
+    padding-top: 24px;
+}
+.brand h1 {
+    display: inline-block;
+    color: #ffffff;
+    font: 700 69px/58px 'Roboto Slab', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    overflow: hidden;
+}
+.brand .slogan {
+    margin-left: 2px;
+    color: #726e74;
+    font: italic 300 16px/26px 'Ubuntu', sans-serif;
+}
+@media (max-width: 979px) {
+    .brand {
+        float: none;
+        text-align: center;
+    }
+}
+nav {
+    padding-top: 43px;
+}
+.sf-menu {
+    display: inline-block;
+    margin-right: -15px;
+}
+.sf-menu > li {
+    float: left;
+    position: relative;
+    font: normal 16px/20px 'Roboto Slab', sans-serif;
+    text-align: center;
+    text-transform: uppercase;
+}
+.sf-menu > li > a {
+    position: relative;
+    display: inline-block;
+    padding: 11px 15px 11px 13px;
+    z-index: 1;
+}
+.sf-menu > li + li {
+    margin-left: 9px;
+}
+.sf-menu li {
+    color: #fff;
+}
+.sf-menu li a {
+    display: block;
+    height: 100%;
+}
+.sf-menu li.sfHover > a,
+.sf-menu li.current > a,
+.sf-menu li > a:hover {
+    background: #db4333;
+}
+.sf-menu ul {
+    position: absolute;
+    display: none;
+    width: 220px;
+    padding: 33px 0 32px;
+    font: 600 14px/16px 'Open Sans', sans-serif;
+    z-index: 2;
+    box-sizing: border-box;
+}
+.sf-menu ul li {
+    position: relative;
+}
+.sf-menu ul a {
+    padding: 6px 10px 6px;
+}
+ul {
+    list-style: none;
+}
+.row {
+    margin-left: -30px;
+}
+.row:after {
+    clear: both;
+}
+.row:before,
+.row:after {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+[class*="grid_"] {
+    float: left;
+    min-height: 1px;
+    margin-left: 30px;
+}
+.grid_12 {
+    width: 1170px;
+}
+.grid_6 {
+    width: 570px;
+}
+.container {
+    margin-right: auto;
+    margin-left: auto;
+    box-sizing: border-box;
+    width: 1170px;
+}
+.container:before,
+.container:after {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+.container:after {
+    clear: both;
+}
+
+/* ================================================= */
+/* -------------------- CONTENT -------------------- */
+/* ================================================= */
+.meal-container {
+    margin: 20px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+.meal img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+}
+.meal-info {
+    padding: 10px;
+    flex-grow: 1;
+}
+.meal-info h3 {
+    margin: 5px 0;
+    font-weight: 800;
+}
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+button {
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.details-btn {
+    background-color: #2196f3;
+    color: white;
+}
+.details-btn:hover {
+    background-color: #0056b3;
+}
+.add-btn {
+    background-color: #ffc107;
+    color: black;
+}
+.add-btn:hover {
+    background-color: #e0a800;
+}
+.popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #eeeeee;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    padding: 20px;
+    z-index: 10;
+    display: none;
+}
+.popup h2 {
+    margin-top: 0;
+    font-weight: 800;
+    color: #333;
+    text-align: center;
+}
+.popup input,
+.popup select,
+.popup button {
+    width: 100%;
+    margin: 5px 0;
+    padding: 8px;
+    border: 1px solid #1a1a1a;
+    border-radius: 5px;
+}
+.meal-type-list {
+    margin-top: 10px;
+}
+.meal-type-list h3 {
+    background-color: #ffe4c4;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+.meal-type-list h3:hover {
+    background-color: #ffd7a3;
+}
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 5;
+    display: none;
+}
+.popup button {
+    width: 100%;
+    margin: 5px 0;
+    padding: 8px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    color: #000000;
+    font-weight: 1000px;
+    transition: background-color 0.3s;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #928482;
+}
+#btnCreate {
+    background-color: #4caf50;
+    color: white;
+}
+#btnCreate:hover {
+    background-color: #388e3c;
+}
+#btnRead {
+    background-color: #2196f3;
+    color: white;
+}
+#btnRead:hover {
+    background-color: #1976d2;
+}
+#btnDelete {
+    background-color: #f44336;
+    color: white;
+}
+#btnDelete:hover {
+    background-color: #d32f2f;
+}
+
+.content {
+    padding: 60px;
+    text-align: center;
+    flex: 1;
+}
+h3 {
+    font-weight: bold;
+    margin-top: 20px;
+}
+.meal {
+    display: flex;
+    width: 90%;
+    max-width: 600px;
+    border: 1px solid #ddd;
+    border-radius: 15px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+.meal:hover {
+    transform: scale(1.01);
+}
+input {
+    width: 50%;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    border-radius: 20px;
+    margin-right: 10px;
+}
+.search,
+#searchType {
+    background-color: #7a0021;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    font-size: 16px;
+    border-radius: 20px;
+    cursor: pointer;
+}
+.search:hover,
+#searchType:hover {
+    background-color: #6f3a3a;
+}
+.meal-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 5px 10px;
+    margin: 5px 0;
+    background-color: #c7c7c7;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.6);
+}
+.delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 3px;
+    font-size: 16px;
+    margin-left: auto;
+}
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
+/* ================================================= */
+/* -------------------- FOOTER -------------------- */
+/* ================================================= */
+.footer {
+    background: url("img/header_bg.png") repeat bottom;
+    min-height: 33px;
+    display: flex;
+    color: white;
+    text-align: center;
+    padding: 5px;
+    display: inline-block;
+}
+.info {
+    font: 400 13px/20px 'Open Sans', sans-serif;
+    color: #bd15bd;
+}
+.info a:hover {
+    color: #33c96e;
+}
+@media (max-width: 479px) {
+    .info {
+        float: none;
+        padding-bottom: 20px;
+    }
+    .footer {
+        text-align: center;
+        padding: 50px 0 30px;
+    }
+}
+
+/* ================================================= */
+/* -------------------- MEAL.HTML -------------------- */
+/* ================================================= */
+main {
+    padding: 20px;
+    text-align: center;
+}
+.meal-details,
+.video-container {
+    background: #f1fbff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+    margin: 20px auto;
+    max-width: 800px;
+    text-align: left;
+}
+.video-container {
+    padding: 25px;
+    text-align: center;
+}
+.meal-details img {
+    width: 50%;
+    border-radius: 40px;
+    margin: 15px auto;
+    display: block;
+}
+main h1 {
+    text-align: center;
+    font-size: 30px;
+    font-family: Roboto;
+}
+main h2,
+main h3 {
+    margin: 10px 0;
+    color: #5293b6;
+    font-weight: bold;
+    font-size: 20px;
+    font-family: Tinos;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+}
+main ul li {
+    display: flex;
+    flex-direction: column;
+    background: #d6d6d6;
+    margin: 5px 0;
+    padding: 15px;
+    border-radius: 25px;
+    text-align: center;
+    font-weight: 900;
+}
+.ingredient-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    margin-bottom: 5px;
+}
+.instructions {
+    text-align: justify;
+    margin: 10px 0;
+    text-indent: 40px;
+    font-size: 16px;
+    line-height: 1.1;
+    word-spacing: 2px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+iframe {
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 560px;
+    height: 315px;
+}
+
+/* ================================================= */
+/* -------------------- ABOUT.HTML ----------------- */
+/* ================================================= */
+.about {
+    background-color: #ffffff;
+    padding: 30px;
+    max-width: 800px;
+    margin: 20px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: justify;
+}
+.about h2 {
+    font-size: 44px;
+    color: #333333;
+    margin-bottom: 15px;
+    text-align: center;
+}
+.about p {
+    text-align: justify;
+    margin: 10px 0;
+    text-indent: 50px;
+    font-size: 26px;
+    line-height: 1.1;
+    word-spacing: 1px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    color: #555555;
+}
+
+/* ================================================= */
+/* -----------------COMPATIBILITY ------------------ */
+/* ================================================= */
+@media (min-width: 980px) and (max-width: 1199px) {
+    .row {
+        margin-left: -20px;
+    }
+    .row:after {
+        clear: both;
+    }
+    .row:before,
+    .row:after {
+        display: table;
+        content: "";
+        line-height: 0;
+    }
+    [class*="grid_"] {
+        float: left;
+        min-height: 1px;
+        margin-left: 20px;
+    }
+    .container {
+        width: 940px;
+    }
+    .grid_12 {
+        width: 940px;
+    }
+    .grid_6 {
+        width: 460px;
+    }
+}
+@media (min-width: 768px) and (max-width: 979px) {
+    .row {
+        margin-left: -20px;
+    }
+    .row:after {
+        clear: both;
+    }
+    .row:before,
+    .row:after {
+        display: table;
+        content: "";
+        line-height: 0;
+    }
+    [class*="grid_"] {
+        float: left;
+        min-height: 1px;
+        margin-left: 20px;
+    }
+    .container {
+        width: 748px;
+    }
+    .grid_12 {
+        width: 748px;
+    }
+    .grid_6 {
+        width: 364px;
+    }
+}
+.select-menu {
+    display: none !important;
+}
+@media (max-width: 767px) {
+    .container {
+        width: 420px;
+        padding: 0 0px;
+    }
+    .row {
+        margin-left: 0;
+    }
+    [class*="grid_"] {
+        float: none;
+        display: block;
+        width: 100%;
+        margin-left: 0;
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+    .select-menu {
+        display: block !important;
+    }
+}

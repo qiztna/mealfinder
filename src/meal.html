@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meal Details</title>
+  <link rel="stylesheet" href="style.css" /> 
+</head>
+<body>
+
+<!--=================================================-->
+<!----------------------- HEADER ---------------------->
+<!--=================================================-->
+<header>
+  <header id="header">
+    <div class="container">
+        <div class="row">
+            <div class="grid_12">
+                <div class="brand put-left">
+                    <h1><a href="index.html">Mealner</a></h1>
+                    <div class="slogan">meal finder</div>
+                </div>
+                <nav class="put-right">
+                    <ul class="sf-menu">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="about.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+  </header>
+
+
+<!--=================================================-->
+<!----------------------- CONTENT --------------------->
+<!--=================================================-->
+<main>
+  <div class="meal-details" id="mealDetails"></div>
+  <div class="video-container">
+    <h3>Watch How to Make This Meal:</h3>
+    <iframe id="mealVideo" src="" allowfullscreen></iframe>
+  </div>
+</main>
+
+<!--=================================================-->
+<!----------------------- FOOTER ---------------------->
+<!--=================================================-->
+<footer class="footer">2024 Aina Qistina
+  <p class="info">
+    &copy; <a href="index.html">mealner</a>
+</p>  
+</footer> 
+
+<!--=================================================-->
+<!--------------------- JAVASCRIPT -------------------->
+<!--=================================================-->
+<script>
+  window.onload = function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const mealId = urlParams.get('id');
+    fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${mealId}`)
+      .then(response => response.json())
+      .then(data => {
+        if (data.meals) {
+          const meal = data.meals[0];
+          const ingredients = [];
+          for (let i = 1; i <= 20; i++) {
+            const ingredient = meal[`strIngredient${i}`];
+            const measurement = meal[`strMeasure${i}`];
+            if (ingredient) {
+              ingredients.push({ 
+                name: ingredient, 
+                measure: measurement 
+              });
+            }
+          }
+          document.getElementById('mealDetails').innerHTML = `
+            <h1>${meal.strMeal}</h1>
+            <img src="${meal.strMealThumb}" alt="${meal.strMeal}">
+            <h2>Category: ${meal.strCategory}</h2>
+            <h2>Cuisine: ${meal.strArea}</h2>
+            <h3>Ingredients:</h3>
+            <ul>
+              ${ingredients.map(ingredient => `
+                <li>
+                  ${ingredient.name} - ${ingredient.measure}
+                  <img class="ingredient-image" 
+                    src="https://www.themealdb.com/images/ingredients/${ingredient.name}-Small.png" 
+                    alt="${ingredient.name}">
+                </li>`).join('')}
+            </ul>
+            <h3>Instructions:</h3>
+            <p class="instructions">${meal.strInstructions}</p>
+          `;
+          // Set YouTube video link
+          const videoId = meal.strYoutube.split('v=')[1];
+          document.getElementById('mealVideo').src = `https://www.youtube.com/embed/${videoId}`;
+        } else {
+          document.getElementById('mealDetails').innerHTML = 'No meal details found!';
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching meal details:', error);
+        document.getElementById('mealDetails').innerHTML = 'Failed to load meal details!';
+      });
+  };
+</script>
+</body>
+</html>
